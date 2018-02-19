@@ -1,6 +1,6 @@
 pragma solidity ^0.4.17;
 
-import './COALITE1Receiver.sol';
+import './COALITE/COALITE1Receiver.sol';
 
 contract ExampleReceiverContract is COALITE1Receiver {
 
