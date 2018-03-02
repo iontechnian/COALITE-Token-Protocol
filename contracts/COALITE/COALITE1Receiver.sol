@@ -1,8 +1,8 @@
 pragma solidity ^0.4.17;
 
 import '../Util/OwnerUtil.sol';
-import './Interfaces/ICOALITEDataBase.sol';
-import './Interfaces/ICOALITE1Token.sol';
+import './COALITEDataBase.sol';
+import './COALITE1Token.sol';
 
 interface ERC20 { function transfer(address to, uint tokens) public returns (bool success); }
 
@@ -21,7 +21,7 @@ contract COALITE1Receiver is OwnerUtil {
 
     ReferenceMode mode;
     address TokenAddr;
-    ICOALITEDataBase DB;
+    COALITEDataBase DB;
 
     ///Called by a COALITE Token
     function tokenReceived(address _sender, uint _value, bytes _data) public returns (bool) {
@@ -43,17 +43,6 @@ contract COALITE1Receiver is OwnerUtil {
         if (mode == ReferenceMode.DATABASE) {
             if (!DB.tokenExists(token)) {
                 return false;
-            }
-        }
-
-        //if the _data given is at least 4 bytes then it means it can possibly have a valid sig
-        if (_data.length >= 4) {
-            uint32 u = uint32(_data[3]) + (uint32(_data[2]) << 8) + (uint32(_data[1]) << 16) + (uint32(_data[0]) << 24);
-            bytes4 sig = bytes4(u);
-
-            if (u != 0) {
-
-                this.call(sig, _data);
             }
         }
 
@@ -92,7 +81,7 @@ contract COALITE1Receiver is OwnerUtil {
     function setDataBase(address _db) public onlyOwner {
 
         mode = ReferenceMode.DATABASE;
-        DB = ICOALITEDataBase(_db);
+        DB = COALITEDataBase(_db);
     }
 
     /**
@@ -113,7 +102,7 @@ contract COALITE1Receiver is OwnerUtil {
      */
     function transferTokenCOALITE(address _token, address _to, uint _amount) public onlyOwner {
 
-        ICOALITE1Token(_token).transfer(_to, _amount);
+        COALITE1Token(_token).transfer(_to, _amount);
     }
 
     /**
